@@ -5,7 +5,7 @@ traefik_info () {
 traefik_menu_start_setup
 # VARIABLES ####################################################################
 pgrole="traefik"
-image="traefik:1.7"
+image="traefik:latest"
 port_inside01="80"; port_outside01="80"
 port_inside02="443"; port_outside02="443"
 
@@ -25,7 +25,7 @@ pfillin=$(cat /pg/tmp/p.info)
 
 # IMAGES EXPORT - 1ST IS DEFAULT ###############################################
 cat <<- EOF > "/pg/images/$pgrole.images"
-traefik:1.7
+traefik:latest
 EOF
 
 rm -rf /pg/data/traefik/acme/acme.json
@@ -47,7 +47,6 @@ $container_header
           PROVIDER: '$provider'
           $pfillin
         volumes:
-          - '/pg/data/traefik/traefik.toml:/etc/traefik/traefik.toml:ro'
           - '/etc/localtime:/etc/localtime:ro'
           - '/pg/data/traefik/acme:/etc/traefik/acme'
           - '/var/run/docker.sock:/var/run/docker.sock:ro'
@@ -63,7 +62,7 @@ $container_header
 EOF
 
 touch /pg/data/traefik/acme/acme.json
-chmod 600 /pg/data/traefik/traefik.toml /pg/data/traefik/acme/acme.json
-chown 1000 /pg/data/traefik/traefik.toml /pg/data/traefik/acme/acme.json
+chmod 600  /pg/data/traefik/acme/acme.json
+chown 1000  /pg/data/traefik/acme/acme.json
 
 }
