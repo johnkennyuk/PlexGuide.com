@@ -5,7 +5,7 @@ traefik_info () {
 traefik_menu_start_setup
 # VARIABLES ####################################################################
 pgrole="traefik"
-image="traefik:1.7"
+image="traefik:latest"
 port_inside01="80"; port_outside01="80"
 port_inside02="443"; port_outside02="443"
 
@@ -25,52 +25,10 @@ pfillin=$(cat /pg/tmp/p.info)
 
 # IMAGES EXPORT - 1ST IS DEFAULT ###############################################
 cat <<- EOF > "/pg/images/$pgrole.images"
-traefik:1.7
+traefik:latest
 EOF
 
 rm -rf /pg/data/traefik/acme/acme.json
-# TRAEFIK.TOML #################################################################
-cat <<- EOF > "/pg/data/traefik/traefik.toml"
-insecureskipverify = true
-logLevel = "WARN"
-defaultEntryPoints = ["http", "https"]
-
-[entryPoints]
-  [entryPoints.http]
-  address = ":80"
-  [entryPoints.http.redirect]
-  entryPoint = "https"
-  [entryPoints.https]
-  address = ":443"
-  [entryPoints.https.tls]
-  MinVersion = "VersionTLS12"
-  CipherSuites = ["TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256","TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256","TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384","TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384","TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256","TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256"]
-  [entryPoints.monitor]
-  address = ":8081"
-
-[retry]
-
-[acme]
-acmeLogging = true
-email = "$email"
-storage = "/etc/traefik/acme/acme.json"
-entryPoint = "https"
-  [acme.dnsChallenge]
-    provider = "$provider"
-    delayBeforeCheck = "$delaycheck"
-
-[[acme.domains]]
-main = "$domain"
-[[acme.domains]]
-main = "*.$domain"
-
-[docker]
-endpoint = "unix:///var/run/docker.sock"
-domain = "$domain"
-watch = true
-exposedbydefault = false
-network = "plexguide"
-EOF
 
 # YML EXPORT ###################################################################
 container_core
@@ -89,7 +47,6 @@ $container_header
           PROVIDER: '$provider'
           $pfillin
         volumes:
-          - '/pg/data/traefik/traefik.toml:/etc/traefik/traefik.toml:ro'
           - '/etc/localtime:/etc/localtime:ro'
           - '/pg/data/traefik/acme:/etc/traefik/acme'
           - '/var/run/docker.sock:/var/run/docker.sock:ro'
@@ -105,7 +62,7 @@ $container_header
 EOF
 
 touch /pg/data/traefik/acme/acme.json
-chmod 600 /pg/data/traefik/traefik.toml /pg/data/traefik/acme/acme.json
-chown 1000 /pg/data/traefik/traefik.toml /pg/data/traefik/acme/acme.json
+chmod 600  /pg/data/traefik/acme/acme.json
+chown 1000  /pg/data/traefik/acme/acme.json
 
 }
