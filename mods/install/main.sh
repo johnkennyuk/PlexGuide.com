@@ -10,7 +10,7 @@ if [[ -e "/bin/docker" ]]; then chmod 0755 /bin/docker && chown 1000:1000 /bin/d
 if [[ "$pgcmd" != "true" ]]; then
 rm -rf /pg/mods
 rm -rf /pg/tmp/checkout
-git clone -b alpha --single-branch https://github.com/plexguide/PlexGuide.com.git /pg/tmp/checkout
+git clone -b alpha --single-branch https://github.com/johnkennyuk/PlexGuide.com.git /pg/tmp/checkout
 mv -f /pg/tmp/checkout/mods /pg; fi
 ################################################################################
 fpath="/pg/mods/functions"; source "$fpath"/install_sudocheck; install_sudocheck
