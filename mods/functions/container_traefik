@@ -13,7 +13,7 @@ cat /pg/var/defaults/default.shield > "/pg/data/$pgrole/shield.setting"; fi
 if [[ $(cat "/pg/data/$pgrole/shield.setting") == "ON" ]]; then
 container_traefik="  traefik.enable: 'true'
           traefik.port: '$traefik_extport'
-          traefik.frontend.rule: 'Host:$cname_fill.$domain,Host:$domain'
+          traefik.frontend.rule: 'Host:$cname_fill.$domain'
           traefik.frontend.auth.forward.address: 'http://shield:4181'
           traefik.frontend.headers.SSLHost: '$domain'
           traefik.frontend.headers.SSLRedirect: 'true'
@@ -27,7 +27,7 @@ container_traefik="  traefik.enable: 'true'
 else
   container_traefik="  traefik.enable: 'true'
           traefik.port: '$traefik_extport'
-          traefik.frontend.rule: 'Host:$cname_fill.$domain,Host:$domain'
+          traefik.frontend.rule: 'Host:$cname_fill.$domain'
           traefik.frontend.headers.SSLHost: '$domain'
           traefik.frontend.headers.SSLRedirect: 'true'
           traefik.frontend.headers.STSIncludeSubdomains: 'true'
